@@ -1,0 +1,30 @@
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c This file contains all required input parameters and files for the
+c inversion program "invert3d.f90"
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+vgridsref.in                c: Reference velocity grid
+vgrids.in                   c: Current velocity grid
+interfacesref.in            c: Reference interface grid
+interfaces.in               c: Current interface grid
+sourcesref.in               c: Reference source coords
+sources.in                  c: Current source coordinates
+stimes.dat                  c: Current source time perturbations
+receivers.in                c: Receiver coordinates
+otimes.dat                  c: Observed traveltimes
+mtimes.dat                  c: Model traveltimes
+rtimeso.dat                 c: Reference teleseismic traveltimes
+frechet.in                  c: Frechet derivative parameters
+frechet.dat                 c: Frechet derivatives
+inviter.in                  c: File indicating current inversion step
+propgrid.in                 c: File containing propagation grid parameters
+0.07                        c: Minimum distance between interfaces (km)
+0.2                         c: Minimum permitted velocity (km/s)
+0                           c: Remove mean from predicted teleseisms (0=no,1=yes)
+1     1.0    1.0            c: Velocity inversion (0=no,1=yes),damp,smooth
+0     0.1    1.0            c: Interface inversion (0=no, 1=yes),damp,smooth
+0     1.0    1.0            c: Source inversion (0=no, 1=yes),damp1,damp2
+20                          c: Subspace dimension (max=50)
+1.0                         c: Global damping factor (epsilon)
+1                           c: Apply second derivative smoothing (0=no,1=yes)
+100.0                       c: Global smoothing factor (eta)
+6371.0                      c: Earth radius in km

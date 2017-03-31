@@ -1,0 +1,23 @@
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c Input file for generating source and receiver files
+c for use by 3D FMM code. Will also generate traveltime
+c file if required.
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+sources.in                  c: Output source file
+receivers.in                c: Output receiver file
+sourcederivs.in             c: Output source derivative file
+./picks/                    c: Directory containing input receiver files
+1                           c: Number of input source files
+1                           c: Extract traveltimes (0=no, 1=yes)
+otimes.dat                  c: File containing extracted traveltimes
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c first input source file and associated path information
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+./picks/input_sf.in         c: Input source file
+0                           c: Local (0) or teleseismic sources (1)
+0                           c: Compute source derivatives (0=no, 1=yes)
+1                           c: Number of paths from these sources
+1                           c: Number of path segments for path 1
+c: Path sequence information plus velocity fields below
+0 1
+1

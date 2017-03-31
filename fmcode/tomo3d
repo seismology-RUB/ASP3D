@@ -1,0 +1,137 @@
+#!/usr/bin/ksh
+#
+# NOTE: If ksh is not available, you may use zsh.
+#
+############################################
+# Script for running multi-parameter
+# tomography program
+############################################
+#
+########################################################
+# Program and files for solving the forward problem with
+# the Fast Marching Method
+########################################################
+#
+# Name of program for calculating FMM traveltimes
+fmm=fm3d
+# Name of program for computing frechet.in file
+frech=frechgen
+# Name of file containing FMM traveltimes
+ttim=arrivals.dat
+# Name of file containing current velocity grid
+cvg=vgrids.in
+# Name of file containing current interface grid
+cig=interfaces.in
+# Name of file containing current source locations
+csl=sources.in
+# Output diagnostics file
+diagnos=fm3dlog.out
+#
+#########################################################
+# Program and files for solving the inverse problem using
+# subspace inversion
+#########################################################
+#
+# Name of program for performing inversion
+inv=invert3d
+# Name of file containing iteration number
+itn=inviter.in
+# Name of file containing current model traveltimes
+mtrav=mtimes.dat
+# Name of file containing reference model traveltimes
+rtrav=rtimes.dat
+# Name of file containing initial velocity grid
+ivg=vgridsref.in
+# Name of file containing initial interface grid
+iig=interfacesref.in
+# Name of file containing initial source locations
+isl=sourcesref.in
+#
+#########################################################
+# Program and files for calculating traveltime
+# residuals
+#########################################################
+#
+# Name of program for calculating traveltime residuals
+resid=residuals
+# Name of output file for calculating traveltime residuals
+resout=residuals.dat
+#
+###############################
+###############################
+cd=chdir
+ifile=tomo3d.in
+typeset -i COUNT
+typeset -i BGITER
+typeset -i NI
+typeset -i ITER
+typeset -i BINV
+###############################
+###############################
+#
+# Open input file and read in variables
+#
+exec 3<$ifile
+  read -u3 NI
+  read -u3 BGITER
+  read -u3 BINV
+exec 3<&-
+#
+# If necessary, copy the initial velocity,
+# interface and source files to the current files
+# read by fm3d. Generate the frechet.in file and 
+# set the iteration number to 1.
+#
+if [[ $BGITER -eq 0 ]]
+then
+   cp $ivg $cvg
+   cp $iig $cig
+   cp $isl $csl
+   $frech
+   ITER=1
+   exec 4>$itn
+      print -u4 $ITER
+   exec 4<&-
+fi
+#
+#
+# Run FMM once to generate traveltimes for current model if
+# necessary
+#
+if [[ $BGITER -eq 0 || ($BGITER -eq 1 && $BINV -eq 1) ]] 
+then
+   $fmm>$diagnos 
+   cp $ttim $mtrav
+   #
+   #  Repeat this copy for reference traveltimes
+   #
+   cp $ttim $rtrav
+   #
+   # Calculate initial residual
+   #
+   exec 5>$resout
+   $resid | (read ttres; print -u5 $ttres)
+else
+   exec 5>>$resout
+fi
+#
+# Now begin a loop to iteratively apply subspace inversion
+# and FMM
+#
+ITER=1
+while [[ $ITER -le $NI ]]
+do
+   $inv
+   $fmm>$diagnos
+   cp $ttim $mtrav
+#
+#  Calculate traveltime residual
+#
+   $resid | (read ttres; print -u5 $ttres)
+   ITER=ITER+1
+   COUNT=ITER
+   exec 4>$itn
+      print -u4 $COUNT
+   exec 4<&-
+done
+exec 5<&-

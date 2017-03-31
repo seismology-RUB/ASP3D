@@ -1,0 +1,7 @@
+otimes.dat                       c: Observed times
+mtimes.dat                       c: Model times
+sourcesref.in                    c: Source file
+rtimeso.dat                      c: Reference teleseismic times
+invert3d.in                      c: Inversion parameters (indicates if mean is
+                                    to be removed from teleseismic
+                                    traveltimes)

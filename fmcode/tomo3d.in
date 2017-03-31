@@ -1,0 +1,9 @@
+4
+0
+0
+
+In order we have
+c: Number of inversion iterations
+c: Begin from starting model (0) or current iteration (1)
+c: If above equals 1, then start with inversion (0) or forward
+   step (1)

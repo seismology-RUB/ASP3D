@@ -1,0 +1,43 @@
+invert3d.in                  c: Input file for invert3d
+frechet.in                   c: File specifying derivatives for fm3d
+vgridsref.in                 c: File containing reference velocity grid
+sourcesref.in                c: File containing reference source locations
+-1                           c: Velocity derivatives (>0=subset, -1=all)
+1                            c: If all, type 1 (1), type 2 (2) or both (3)
+1                            c: Indices of velocity grids (if subset chosen)
+1                            c: Velocity types for inversion (1 or 2)
+-1                           c: Interface derivatives (>0=subset, -1=all)
+2                            c: Indices of interface grids (if subset chosen)
+-1                           c: Source derivatives (>0=subset, -1=all) 
+sourcederivs.in              c: File specifying sources for inversion (if subset
+                                chosen)
+
+NOTE: On the sixth line, type 1 refers to the first specified velocity field in
+vgrids.in (usually P), and type 2 refers to to the second sepcified velocity field
+(usually S). However, at this stage, the tomography code can only handle one type of
+velocity (i.e. cannot simultaneously invert P and S times yet). Therefore, it is best
+to set this to type 1 (and only use 1 for "Velocity types for inversion)
+
+When a subset of velocity or interface derivatives is chosen, then the number to be
+entered (>0) must equal the number of layers (interfaces) that are to be inverted.
+The indices of the velocity (interface) grids must be equal in number to the number
+of layers (interfaces) that are specified. For example, if one chooses:
+
+4                           c: Velocity derivatives (>0=subset, -1=all)
+
+then there should be four entries in the field two lines below, e.g.
+
+2 3 5 6                     c: Indices of velocity grids (if subset chosen)
+
+and four entries in the field two lines below will be:
+
+1 1 1 1                     c: Velocity types for inversion (1 or 2)
+
+In this example, we are inverting for velocity in layers 2,3,5 and 6 (layer 1 is the
+top layer). Note that the top and bottom bounding interfaces can be inverted for, but
+in most cases, one would probably not want to do this.
+
+Finally, any combination of source locations can be inverted for. If only a subset of
+locations are inverted for, then an external file "sourcederivs.in" must be read in.
+The two programs for generating synthetic data (moddata) and observed data (obsdata)
+will generate these files for you.
