@@ -261,7 +261,10 @@ class SeismicShot(object):
             return self.picks[traceID]['lpp']
 
     def getSymmetricPickError(self, traceID):
-        pickerror = self.picks[traceID]['spe']
+        if self.picks[traceID].has_key('spe'):
+            pickerror = self.picks[traceID]['spe']
+        else:
+            pickerror = np.nan
         if np.isnan(pickerror) == True:
             print("SPE is NaN for shot %s, traceID %s" % (self.getShotnumber(), traceID))
         return pickerror
@@ -422,6 +425,13 @@ class SeismicShot(object):
         tgap = self.getTgap()
         tsignal = self.getTsignal()
         tnoise = self.getPickIncludeRemoved(traceID) - tgap
+
+        # unset epp and lpp if SNR > 1 (else earllatepicker cant set values)
+        if not self.getSNR(traceID)[0] > 1:
+            self.picks[traceID]['epp'] = np.nan
+            self.picks[traceID]['lpp'] = np.nan
+            self.picks[traceID]['spe'] = np.nan
+            return
 
         (self.picks[traceID]['epp'],
          self.picks[traceID]['lpp'],

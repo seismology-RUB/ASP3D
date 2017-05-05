@@ -422,9 +422,7 @@ class Survey(object):
         print('Starting setEarllate...')
         for shot in self.data.values():
             for traceID in shot.getTraceIDlist():
-                # set epp and lpp if SNR > 1 (else earllatepicker cant set values)
-                if shot.getSNR(traceID)[0] > 1:
-                    shot.setEarllatepick(traceID)
+                shot.setEarllatepick(traceID)
 
     def cleanBySPE(self, maxSPE):
         '''
@@ -473,6 +471,9 @@ class Survey(object):
         '''
         for shot in self.data.values():
             shot.setPick(traceID, pick, revised=True)
+            shot.picks[traceID]['epp'] = pick
+            shot.picks[traceID]['lpp'] = pick
+            shot.picks[traceID]['spe'] = pick
             shot.setPickwindow(traceID, shot.getCut())
 
     def setInitialPickwindow(self):
