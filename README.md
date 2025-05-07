@@ -3,6 +3,7 @@
 ActiveSeismoPick3D is a software toolkit for automatic picking of first arrivals and manual revision.
 It also offers an easy workflow for refraction tomography, providing an interface to the Fast Marching Tomography algorithm (FMTOMO) and a tool for vtk output.
 
+![main](examples/GZB_data/ActiveSeismoPick3D.png)
 
 ## Authors and License
 
